@@ -18,7 +18,8 @@ class HomeController extends Controller
         $partners = Partner::all(); // Variabel $partners didefinisikan di sini
 
         // 3. Ambil query dasar untuk event
-        $eventQuery = Event::with('category')->where('date', '>=', now());
+        // Mengambil query dasar event
+        $eventQuery = Event::with('category');
 
         // Logika Filter berdasarkan kategori
         if ($request->has('category') && $request->category != '') {

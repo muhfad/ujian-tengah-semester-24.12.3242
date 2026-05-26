@@ -30,18 +30,29 @@
         <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
             @forelse($events as $index => $event)
             <tr class="hover:bg-slate-50/70 transition">
-                <td class="p-4 text-center text-slate-400">{{ $events->firstItem() + $index }}</td>
+                <td class="p-4 text-center text-slate-400">
+                    {{ method_exists($events, 'firstItem') ? ($events->firstItem() + $index) : ($index + 1) }}
+                </td>
                 <td class="p-4 font-bold text-slate-900">{{ $event->title }}</td>
-                <td class="p-4"><span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md text-xs font-bold">{{ $event->category->name }}</span></td>
+                <td class="p-4">
+                    <span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md text-xs font-bold">
+                        {{ $event->category->name ?? 'Tanpa Kategori' }}
+                    </span>
+                </td>
                 <td class="p-4 text-slate-500">{{ \Carbon\Carbon::parse($event->date)->format('d M Y, H:i') }}</td>
                 <td class="p-4 text-slate-900">Rp {{ number_format($event->price, 0, ',', '.') }}</td>
                 <td class="p-4 text-slate-500">{{ $event->stock }} Pcs</td>
                 <td class="p-4 flex justify-center space-x-2">
-                    <a href="{{ route('admin.events.edit', $event->id) }}" class="text-amber-600 hover:bg-amber-50 py-1.5 px-3 rounded-lg border border-amber-200 transition">Edit</a>
+                    <a href="{{ route('admin.events.edit', $event->id) }}" class="text-amber-600 hover:bg-amber-50 py-1.5 px-3 rounded-lg border border-amber-200 transition">
+                        Edit
+                    </a>
+                    
                     <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus event ini?')">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-rose-600 hover:bg-rose-50 py-1.5 px-3 rounded-lg border border-rose-200 transition">Hapus</button>
+                        <button type="submit" class="text-rose-600 hover:bg-rose-50 py-1.5 px-3 rounded-lg border border-rose-200 transition">
+                            Hapus
+                        </button>
                     </form>
                 </td>
             </tr>
@@ -52,8 +63,11 @@
             @endforelse
         </tbody>
     </table>
-    <div class="p-4 border-t border-slate-100 bg-slate-50/50">
-        {{ $events->links() }}
-    </div>
+    
+    @if(method_exists($events, 'links'))
+        <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+            {{ $events->links() }}
+        </div>
+    @endif
 </div>
 @endsection
