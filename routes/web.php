@@ -5,6 +5,18 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PartnerController;
+
+// Sisi Publik / Pengunjung 
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
+
+// Sisi Administrator Workspace Panel
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::resource('categories', CategoryController::class);
+    Route::resource('partners', PartnerController::class);
+});
 
 /*
 |--------------------------------------------------------------------------
